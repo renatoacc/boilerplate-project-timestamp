@@ -35,13 +35,14 @@ app.get("/api/:date", (req, res) => {
 
   let dateObject = new Date(dateString);
 
-  if (dateObject.toString() === "Invalid Date") {
+  if (dateObject.toUTCString() === "Invalid Date") {
     res.json({ error: "Invaid Date" });
   } else {
     res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
   }
 });
 
+// ------------------------ first solution ----------------------------------
 
 // app.get("/api/:date", (req, res, next) => {
 
