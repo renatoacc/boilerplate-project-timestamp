@@ -35,7 +35,7 @@ app.get("/api/:date", (req, res, next) => {
     const [year, month, day] = req.params.date.match(/\d+/g).map(Number);
     const inSecunds = Math.floor(new Date(year, month - 1, day));
     const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0)).toUTCString();
-    res.json({ unix: inSecunds, utc: utcDate });
+    res.json({ unix: inSecunds.toString(), utc: utcDate });
   };
 });
 
