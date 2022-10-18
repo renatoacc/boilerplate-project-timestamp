@@ -24,20 +24,40 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+app.get("/api/:date", (req, res) => {
+  let dateString = req.params.date;
 
-app.get("/api/:date", (req, res, next) => {
-  if (/^\d+$/.test(req.params.date)) {
-    const date = new Date(req.params.date * 1).toLocaleDateString("en-US");
-    const [month, day, year] = date.match(/\d+/g).map(Number);
-    const utcDateinSecunds = new Date(Date.UTC(year, month - 1, day, 0, 0, 0)).toUTCString();
-    res.json({ unix: Number(req.params.date), utc: utcDateinSecunds })
+  if (/\d{5,}/.test(dateString)) {
+    dateInt = parseInt(dateString);
+
+    res.json({ unix: dateString, utc: new Date(dateInt).toUTCString() });
+  }
+
+  let dateObject = new Date(dateString);
+
+  if (dateObject.toString() === "Invalid Date") {
+    res.json({ error: "Invaid Date" });
   } else {
-    const [year, month, day] = req.params.date.match(/\d+/g).map(Number);
-    const inSecunds = Math.floor(new Date(year, month - 1, day));
-    const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0)).toUTCString();
-    res.json({ unix: inSecunds.toString(), utc: utcDate });
-  };
+    res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
+  }
 });
+
+
+// app.get("/api/:date", (req, res, next) => {
+
+//   if (/^\d+$/.test(req.params.date)) {
+//     const date = new Date(req.params.date * 1).toLocaleDateString("en-US");
+//     const [month, day, year] = date.match(/\d+/g).map(Number);
+//     const utcDateinSecunds = new Date(Date.UTC(year, month - 1, day, 0, 0, 0)).toUTCString();
+//     res.json({ unix: Number(req.params.date), utc: utcDateinSecunds })
+//   } else {
+//     const [year, month, day] = req.params.date.match(/\d+/g).map(Number);
+//     const inSecunds = Math.floor(new Date(year, month - 1, day));
+//     const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0)).toUTCString();
+//     res.json({ unix: inSecunds.toString(), utc: utcDate });
+//   };
+
+// });
 
 
 
